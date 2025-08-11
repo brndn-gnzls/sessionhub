@@ -1,6 +1,6 @@
 # Source: https://github.com/github/gitignore/blob/main/Python.gitignore
 
-# Byte-compiled / optimized / DLL files
+# Byte-compiled / optimization / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
