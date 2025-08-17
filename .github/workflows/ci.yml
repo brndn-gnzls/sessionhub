@@ -2,13 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths-ignore:
       - "**/*.md"
       - ".gitignore"
       - "infra/**"
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
     paths-ignore:
       - "**/*.md"
       - ".gitignore"
