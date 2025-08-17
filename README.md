@@ -19,3 +19,4 @@ A production-grade, budget-friendly stack:
 
 
 ## GitHub Actions Workflow
+![CI](https://github.com/brndn-gnzls/sessionhub/actions/workflows/ci.yml/badge.svg)
