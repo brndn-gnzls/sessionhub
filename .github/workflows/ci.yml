@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - "**/*.md"
+      - ".gitignore"
+      - "infra/**"
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - "**/*.md"
+      - ".gitignore"
+      - "infra/**"
+
+permissions:
+  contents: read
+
+# Prevents duplicate runs; cancels an in-flight run for same ref/PR when a new push arrives.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"  # built-in caching for pip
+
+      # Build error for native deps, uncomment the apt-get block:
+      # - name: Install system packages (if needed)
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y build-essential
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Type-check (mypy)
+        run: mypy api
+
+      - name: Run tests (pytest)
+        run: pytest -q
