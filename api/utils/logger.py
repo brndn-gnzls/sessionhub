@@ -16,6 +16,7 @@ import sys
 # Plays well with log aggregators.
 import structlog
 
+
 def configure_logging(level: str = "INFO") -> None:
     """
     Configure stdlib logging + structlog for JSON output.
@@ -28,26 +29,28 @@ def configure_logging(level: str = "INFO") -> None:
     timestamper = structlog.processors.TimeStamper(fmt="iso")
 
     logging.basicConfig(
-        format="%(message)s",                                   # print only log message.
-        stream=sys.stdout,                                      # sends logs to standard output.
-        level=getattr(logging, level.upper(), logging.INFO),    # sets logging level based on the level arg.
+        format="%(message)s",  # print only log message.
+        stream=sys.stdout,  # sends logs to standard output.
+        level=getattr(
+            logging, level.upper(), logging.INFO
+        ),  # sets logging level based on the level arg.
     )
 
     # processors are functions that modify or add to log entries before they are output.
     structlog.configure(
         processors=[
-            structlog.contextvars.merge_contextvars,    # add context variables to each log (requestID).
-            timestamper,                                # adds the timestamp, defined on line 28.
-            structlog.processors.add_log_level,         # Adds the log level (INFO) to output.
-            structlog.processors.StackInfoRenderer(),   # Adds stacktrace info.
-            structlog.processors.format_exc_info,       # formats exceptions.
-            structlog.processors.JSONRenderer(),        # converts finally log entry to JSON.
+            structlog.contextvars.merge_contextvars,  # add context variables to each log (requestID).
+            timestamper,  # adds the timestamp, defined on line 28.
+            structlog.processors.add_log_level,  # Adds the log level (INFO) to output.
+            structlog.processors.StackInfoRenderer(),  # Adds stacktrace info.
+            structlog.processors.format_exc_info,  # formats exceptions.
+            structlog.processors.JSONRenderer(),  # converts finally log entry to JSON.
         ],
-        wrapper_class=structlog.make_filtering_bound_logger(    # output only logs at or above the chosen level.
+        wrapper_class=structlog.make_filtering_bound_logger(  # output only logs at or above the chosen level.
             getattr(logging, level.upper(), logging.INFO)
         ),
         # Context is persistent metadata attached to a logger.
-        context_class=dict,                                     # stores context as a dictionary.
-        logger_factory=structlog.PrintLoggerFactory(),          # prints logs directly (stdout).
-        cache_logger_on_first_use=True,                         # caches logger after first use.
+        context_class=dict,  # stores context as a dictionary.
+        logger_factory=structlog.PrintLoggerFactory(),  # prints logs directly (stdout).
+        cache_logger_on_first_use=True,  # caches logger after first use.
     )

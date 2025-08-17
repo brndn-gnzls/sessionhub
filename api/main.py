@@ -1,7 +1,8 @@
 # FastAPI is the application class used to build an ASGI app.
-from fastapi import FastAPI, Request
-
 from contextlib import asynccontextmanager
+
+import structlog
+from fastapi import FastAPI
 
 # Adds proper CORS headers to responses and handles
 # preflight requests. Useful when the frontend runs on
@@ -11,15 +12,15 @@ from fastapi.middleware.cors import CORSMiddleware
 # Strawberry's router that plugs a GraphQL schema into
 # FastAPI.
 from strawberry.fastapi import GraphQLRouter
-import structlog
 
-
-from .settings import get_settings                      # configuration accessor
-from .utils.logger import configure_logging             # wires stdlib logging + structlog
-from .utils.request_id import RequestIDMiddleware       # propagate X-Request-ID for log correlation
-from .routes import health as health_routes             # an APIRouter with our endpoint(s)
-from .graphql.schema import schema                      # strawberry graphql schema
-from .graphql.context import get_context_from_request   # builds the sberry context object for each request
+from .graphql.context import (
+    get_context_from_request,  # builds the sberry context object for each request
+)
+from .graphql.schema import schema  # strawberry graphql schema
+from .routes import health as health_routes  # an APIRouter with our endpoint(s)
+from .settings import get_settings  # configuration accessor
+from .utils.logger import configure_logging  # wires stdlib logging + structlog
+from .utils.request_id import RequestIDMiddleware  # propagate X-Request-ID for log correlation
 
 # Configure logging.
 configure_logging(level=get_settings().log_level)
@@ -42,6 +43,7 @@ async def lifespan(app: FastAPI):
     # Shutdown phase
     log.info("shutdown")
 
+
 app = FastAPI(title="SessionHub API", lifespan=lifespan)
 
 # Middleware
@@ -63,8 +65,6 @@ app.include_router(health_routes.router)
 # GraphQL Router
 # Create sberry GraphQL router with defined schema.
 graphql_app = GraphQLRouter(
-    schema,
-    context_getter=get_context_from_request,
-    graphql_ide="apollo-sandbox"
+    schema, context_getter=get_context_from_request, graphql_ide="apollo-sandbox"
 )
 app.include_router(graphql_app, prefix="/graphql")
