@@ -1,6 +1,7 @@
 # GraphQL framework.
 import strawberry
 
+
 # Decorates as a GraphQL object type, this class becomes
 # a GraphQL `type` in the schema.
 @strawberry.type
@@ -14,6 +15,7 @@ class Query:
     # provide the value.
     def ping(self) -> str:
         return "pong"
+
 
 # Constructs the GraphQL schema by designating `Query` as the root query type.
 # Now the schema knows there is a `ping` field available under `Query`, which

@@ -2,11 +2,13 @@
 # with a request correlation ID from X-Request-ID. Once auth is added
 # the same context can also carry the authenticated `user_id`
 # for resolvers.
+from __future__ import annotations
+
+from fastapi import Request
 
 # api/graphql/context.py
-from __future__ import annotations
-from fastapi import Request
-from strawberry.fastapi import BaseContext  # <-- key import
+from strawberry.fastapi import BaseContext
+
 
 # FastAPI requires that custom context must either be a dict or a class that
 # inherits `BaseContext`. We use a class, so the router will merge
@@ -17,10 +19,17 @@ class GQLContext(BaseContext):
     BaseContext gives you .request, .response, .background_tasks.
     We add our own fields like user_id, request_id for convenience.
     """
-    def __init__(self, *, user_id: str | None = None, request_id: str | None = None,) -> None:
+
+    def __init__(
+        self,
+        *,
+        user_id: str | None = None,
+        request_id: str | None = None,
+    ) -> None:
         super().__init__()
         self.user_id = user_id
         self.request_id = request_id
+
 
 def get_context_from_request(request: Request) -> GQLContext:
     # Build a string request ID.

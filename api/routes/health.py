@@ -13,14 +13,10 @@ from ..settings import get_settings
 router = APIRouter(tags=["health"])
 
 
-@router.get("/healthz")         # Decorator registers the function below as a `GET` on endpoint `/healthz`
+@router.get("/healthz")  # Decorator registers the function below as a `GET` on endpoint `/healthz`
 async def healthz():
     # Access configuration, like app name and environment.
     # If cached via `@lru_cache` avoids repeated reads of
     # variables and configurations.
     s = get_settings()
-    return {
-        "ok": True,
-        "service": s.app_name,
-        "env": s.environment
-    }
+    return {"ok": True, "service": s.app_name, "env": s.environment}

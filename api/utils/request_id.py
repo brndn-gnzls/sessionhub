@@ -8,14 +8,18 @@
 # Creates a random unique ID for requests that did not supply one.
 import uuid
 
-# Starlette provides the core building blocks you need for an
-# async web app or API.
-from starlette.middleware.base import BaseHTTPMiddleware        # Handles boilerplate wrapping an ASGI app.
-from starlette.responses import Response                        # Request/Response primitives you interact
-from starlette.requests import Request                          # with inside Starlette/FastAPI middleware.
 import structlog
 
+# Starlette provides the core building blocks you need for an
+# async web app or API.
+from starlette.middleware.base import (
+    BaseHTTPMiddleware,  # Handles boilerplate wrapping an ASGI app.
+)
+from starlette.requests import Request  # with inside Starlette/FastAPI middleware.
+from starlette.responses import Response  # Request/Response primitives you interact
+
 REQUEST_ID_HEADER = "X-Request-ID"
+
 
 class RequestIDMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
@@ -24,7 +28,9 @@ class RequestIDMiddleware(BaseHTTPMiddleware):
 
         # Grab client-provided request ID if present...
         incoming = request.headers.get(REQUEST_ID_HEADER)
-        request_id = (incoming.strip() if incoming else "") or str(uuid.uuid4()) # ... if not, create one.
+        request_id = (incoming.strip() if incoming else "") or str(
+            uuid.uuid4()
+        )  # ... if not, create one.
 
         # Bind into structlog's context so all logs for this request carry it
         structlog.contextvars.bind_contextvars(request_id=request_id)

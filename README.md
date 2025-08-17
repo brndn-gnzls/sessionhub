@@ -16,7 +16,3 @@ A production-grade, budget-friendly stack:
 - **scripts/** Dev/ops scripts (seed, maintenance)
 - **tests/** Unit & integration tests
 - **.github/**  CI/CD workflows (GitHub Actions)
-
-## Getting Started
-We will add the Python toolchain, dependencies, Docker, and CI in upcoming steps.
-
