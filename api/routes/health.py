@@ -1,5 +1,6 @@
 # Used to create modular groups of routes--essentially
 # mini apps you can attach the main application.
+
 from fastapi import APIRouter
 
 # In FastAPI apps, setting are managed using Pydantic's
@@ -14,7 +15,7 @@ router = APIRouter(tags=["health"])
 
 
 @router.get("/healthz")  # Decorator registers the function below as a `GET` on endpoint `/healthz`
-async def healthz():
+async def healthz() -> dict[str, bool | str]:
     # Access configuration, like app name and environment.
     # If cached via `@lru_cache` avoids repeated reads of
     # variables and configurations.

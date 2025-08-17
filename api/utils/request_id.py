@@ -14,6 +14,7 @@ import structlog
 # async web app or API.
 from starlette.middleware.base import (
     BaseHTTPMiddleware,  # Handles boilerplate wrapping an ASGI app.
+    RequestResponseEndpoint,
 )
 from starlette.requests import Request  # with inside Starlette/FastAPI middleware.
 from starlette.responses import Response  # Request/Response primitives you interact
@@ -22,7 +23,7 @@ REQUEST_ID_HEADER = "X-Request-ID"
 
 
 class RequestIDMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         # Reset per-request context so nothing leaks across requests.
         structlog.contextvars.clear_contextvars()
 
