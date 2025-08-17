@@ -1,4 +1,5 @@
 # FastAPI is the application class used to build an ASGI app.
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 import structlog
@@ -32,7 +33,7 @@ log = structlog.get_logger(__name__)
 # An async context manager is passed via the lifespan parameter.
 # Code before yield runs at startup, after yield runs at shutdown.
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # Startup phase
     log = structlog.get_logger(__name__)
     settings = get_settings()

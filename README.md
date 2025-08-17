@@ -16,3 +16,6 @@ A production-grade, budget-friendly stack:
 - **scripts/** Dev/ops scripts (seed, maintenance)
 - **tests/** Unit & integration tests
 - **.github/**  CI/CD workflows (GitHub Actions)
+
+
+## GitHub Actions Workflow
