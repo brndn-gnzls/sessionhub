@@ -13,6 +13,7 @@ on:
       - "**/*.md"
       - ".gitignore"
       - "infra/**"
+  workflow_dispatch: {}
 
 permissions:
   contents: read
