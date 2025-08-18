@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: .
+      target: dev
+      args:
+        # map host UID/GID to avoid root-owned files on bind mounts.
+        APP_UID: "${UID:-1000}"
+        APP_GID: "${GID:-1000}"
+    image: sessionhub:dev
+    container_name: sessionhub-api
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app:cached
+    environment:
+      # Narrow CORS in dev when you hook up Flutter web later.
+      - CORS_ALLOW_ORIGINS=["http://localhost:3000","http://localhost:5173"]
+    healthcheck:
+      # Check endpoint to ensure service is actually up.
+      test:
+        [
+          "CMD-SHELL",
+          "python - <<'PY'\nimport sys, urllib.request\nurl='http://127.0.0.1:8000/healthz'\ntry:\n  urllib.request.urlopen(url, timeout=2)\n  sys.exit(0)\nexcept Exception:\n  sys.exit(1)\nPY"
+        ]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+      start_period: 5s

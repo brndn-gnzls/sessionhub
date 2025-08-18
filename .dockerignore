@@ -1,0 +1,28 @@
+# VCS / CI
+.git
+.github
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+.mypy_cache/
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Envs & IDE
+.venv/
+.env
+.env.*
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node / misc (if present later)
+node_modules/
