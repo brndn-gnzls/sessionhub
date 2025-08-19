@@ -22,3 +22,6 @@ A production-grade, budget-friendly stack:
 ![CI](https://github.com/brndn-gnzls/sessionhub/actions/workflows/ci.yml/badge.svg)
 
 ## Terraform Setup
+ 
+- **/infra/aws/terraform**
+- Added terraform files to `.gitignore`
