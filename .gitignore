@@ -77,3 +77,15 @@ cython_debug/
 # Local env files
 *.env
 *.env.*
+
+# Terraform
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Local Terraform directories
+.terraform/
