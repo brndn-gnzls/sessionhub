@@ -35,6 +35,7 @@ COPY --chown=${APP_USER}:${APP_USER} . .
 
 EXPOSE 8000
 # Dev command: Uvicorn with auto-reload (docs: --reload)--watch whole repo.
+# Defined in docker-compose.
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 # ---------- prod (for later) ----------
