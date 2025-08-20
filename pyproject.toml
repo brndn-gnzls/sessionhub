@@ -42,10 +42,34 @@ packages = ["api"]
 line-length = 100
 target-version = "py312"
 
+# Only look at these file patterns
+# (Default is ["*.py", "*.pyi", "*.ipynb", "**/pyproject.toml"])
+# Narrowing this reduces accidental “scan the world”.
+include = ["api/**/*.py", "tests/**/*.py", "scripts/**/*.py", "pyproject.toml"]
+
+# Respect .gitignore (true by default; leaving here for clarity)
+respect-gitignore = true
+
+# Treat exclusions as hard exclusions even if a path is passed explicitly
+# (useful in editors, pre-commit and CI)
+force-exclude = true  # :contentReference[oaicite:3]{index=3}
+
+# Add project-specific excludes on top of Ruff’s defaults
+extend-exclude = [
+  "build",                  # your Lambda build tree
+  "dist",
+  "node_modules",
+  ".venv",
+  "infra/**/.terraform",    # Terraform state dirs
+]
+
 [tool.ruff.lint]
 select = ["E","F","I","UP","B","SIM","W","RUF"]
-ignore = ["E501"]
+ignore = ["E501"]  # keep long-line rule off if you prefer
 
+# Example: turn off docstring (D) in tests only, leave it on elsewhere (optional)
+# per-file-ignores let you relax certain rules in specific trees
+per-file-ignores = { "tests/*" = ["D"] }
 
 [tool.mypy]
 python_version = "3.12"

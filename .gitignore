@@ -89,3 +89,8 @@ override.tf.json
 
 # Local Terraform directories
 .terraform/
+
+# Generated artifacts
+build/
+*.zip
+infra/**/.terraform/

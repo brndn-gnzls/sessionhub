@@ -3,5 +3,7 @@ repos:
     rev: v0.6.9
     hooks:
       - id: ruff
-        args: [--fix]          # auto-fix lint issues
-      - id: ruff-format        # format code
+        args: [--fix]
+        exclude: ^(build/|infra/.*/\.terraform/|dist/)
+      - id: ruff-format
+        exclude: ^(build/|infra/.*/\.terraform/|dist/)
