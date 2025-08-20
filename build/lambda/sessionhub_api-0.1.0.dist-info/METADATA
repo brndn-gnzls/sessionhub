@@ -1,0 +1,52 @@
+Metadata-Version: 2.4
+Name: sessionhub-api
+Version: 0.1.0
+Summary: FastAPI + Strawberry GraphQL (Lambda via Mangum), Postgres on EC2, API Gateway HTTP+WS
+Author: You
+License: MIT
+Requires-Python: >=3.12
+Requires-Dist: asyncpg<1,>=0.29
+Requires-Dist: fastapi<1,>=0.115
+Requires-Dist: mangum<1,>=0.17
+Requires-Dist: pydantic-settings<3,>=2.4
+Requires-Dist: pydantic<3,>=2.7
+Requires-Dist: python-json-logger<3,>=2.0
+Requires-Dist: strawberry-graphql[asgi]<1,>=0.230
+Requires-Dist: structlog<25,>=24.1
+Requires-Dist: uvicorn[standard]<1,>=0.30
+Provides-Extra: dev
+Requires-Dist: httpx<1,>=0.27; extra == 'dev'
+Requires-Dist: mypy<2,>=1.10; extra == 'dev'
+Requires-Dist: pytest-asyncio<1,>=0.23; extra == 'dev'
+Requires-Dist: pytest<9,>=8.3; extra == 'dev'
+Requires-Dist: ruff<1,>=0.5; extra == 'dev'
+Requires-Dist: types-python-dateutil; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# Sessionhub (Flutter + GraphQL + Python)
+
+A production-grade, budget-friendly stack:
+
+- **Client**: Flutter/Dart
+- **API**: FastAPI + Strawberry GraphQL (on AWS Lambda via Mangum)
+- **Transport**: API Gateway (HTTP for queries/mutations, WebSocket for subs)
+- **DB**: PostgresQL on EC2 (private, same VPC as Lambda), PgBouncer for pooling
+- **Infra**: AWS (API Gateway, Lambda, VPC, EC2, CloudWatch), IaC in `infra/aws`
+
+## Monorepo Layout
+
+- **api/**: FastAPI + Strawberry app (schema, resolvers, loaders, services)
+- **infra/aws/**: IaC & deployment artifacts for API Gateway, Lambda, VPC, EC2, etc.
+- **migrations/**:Alembic migrations
+- **scripts/** Dev/ops scripts (seed, maintenance)
+- **tests/** Unit & integration tests
+- **.github/**  CI/CD workflows (GitHub Actions)
+
+
+## GitHub Actions Workflow
+![CI](https://github.com/brndn-gnzls/sessionhub/actions/workflows/ci.yml/badge.svg)
+
+## Terraform Setup
+ 
+- **/infra/aws/terraform**
+- Added terraform files to `.gitignore`

@@ -1,9 +1,3 @@
-data "archive_file" "bootstrap_zip" {
-  type        = "zip"
-  source_file = "${path.module}/../../bootstrap_lambda/handler.py"
-  output_path = "${path.module}/bootstrap-handler.zip"
-}
-
 resource "aws_iam_role" "lambda_exec" {
   name = "${var.project_name}-${var.env}-lambda-exec"
   assume_role_policy = jsonencode({
@@ -27,21 +21,27 @@ resource "aws_iam_role_policy_attachment" "vpc_access" {
 }
 
 resource "aws_lambda_function" "api" {
-  function_name    = "${var.project_name}-${var.env}-api"
-  role             = aws_iam_role.lambda_exec.arn
-  runtime          = "python3.12"
-  handler          = "handler.handler"
-  filename         = data.archive_file.bootstrap_zip.output_path
-  source_code_hash = data.archive_file.bootstrap_zip.output_base64sha256
+  function_name = "${var.project_name}-${var.env}-api"
+  role          = aws_iam_role.lambda_exec.arn
 
-  # Attach to the same VPC private subnets & Lambda SG from Root 1
+  runtime = "python3.12"
+  handler = "api.handler.handler" # module.function
+
+  # Point directly at the zip produced by your build step:
+  filename = "${path.module}/../../../../build/lambda_package.zip"
+  # Let Terraform track changes to the zip contents:
+  source_code_hash = filebase64sha256("${path.module}/../../../../build/lambda_package.zip")
+
   vpc_config {
     subnet_ids         = data.terraform_remote_state.vpc.outputs.private_subnet_ids
     security_group_ids = [data.terraform_remote_state.vpc.outputs.lambda_sg_id]
   }
 
   environment {
-    variables = { APP_ENV = var.env }
+    variables = {
+      APP_ENV   = var.env
+      LOG_LEVEL = "INFO"
+    }
   }
 
   tags = { Project = var.project_name, Env = var.env }
