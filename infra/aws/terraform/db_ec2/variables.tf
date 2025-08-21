@@ -1,3 +1,4 @@
+# infra/aws/terraform/db_ec2/variables.tf
 variable "aws_region" {
   type    = string
   default = "us-east-1"
@@ -13,17 +14,17 @@ variable "env" {
   default = "dev"
 }
 
-variable "vpc_cidr" {
+variable "db_name" {
   type    = string
-  default = "10.42.0.0/16"
+  default = "sessionhub"
 }
 
-variable "private_subnet_cidrs" {
-  type    = list(string)
-  default = ["10.42.1.0/24", "10.42.2.0/24"]
+variable "db_user" {
+  type    = string
+  default = "appuser"
 }
 
-variable "public_subnet_cidr" {
+variable "db_password" {
   type    = string
-  default = "10.42.0.0/24"
+  default = "CHANGEME-REPLACE-ME"
 }
